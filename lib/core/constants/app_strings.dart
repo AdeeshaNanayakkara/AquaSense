@@ -2,7 +2,7 @@ class AppStrings {
   AppStrings._();
 
   // App
-  static const String appName = 'E-Commerce App';
+  static const String appName = 'AquaSense';
 
   // Generic
   static const String ok = 'OK';
