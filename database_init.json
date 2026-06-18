@@ -1,23 +1,45 @@
 {
   "Controls": {
-    "mode": "Auto",
+    "mode": "AUTO",
     "pump": false
   },
-  "Inputs": {
-    "tankLevel": 100,
-    "wellLevel": 200
+  "Sensors": {
+    "tank": {
+      "distance": 25,
+      "timestamp": "2026-06-18T10:30:00Z"
+    },
+    "well": {
+      "distance": 120,
+      "timestamp": "2026-06-18T10:30:00Z"
+    }
   },
-  "settings": {
-    "tankLowerLimit": 1000,
-    "tankUpperLimit": 100,
-    "wellLowerLimit": 10000,
-    "wellUpperLimit": 100
+  "Configuration": {
+    "tank": {
+      "emptyDistance": 100,
+      "fullDistance": 10,
+      "criticalLow": 80
+    },
+    "well": {
+      "emptyDistance": 200,
+      "fullDistance": 20,
+      "criticalLow": 150
+    }
+  },
+  "percentage": {
+    "tank": 70,
+    "well": 40
   },
   "WaterUsage": {
-    "2025-07-20": {
+    "2026-07-14": {
       "liters": 120
     },
-    "2025-07-21": {
+    "2026-07-15": {
+      "liters": 95
+    },
+    "2026-07-16": {
+      "liters": 120
+    },
+    "2026-07-17": {
       "liters": 95
     }
   }
