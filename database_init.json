@@ -17,12 +17,14 @@
     "tank": {
       "emptyDistance": 100,
       "fullDistance": 10,
-      "criticalLow": 80
+      "criticalLow": 80,
+      "radius": 50
     },
     "well": {
       "emptyDistance": 200,
       "fullDistance": 20,
-      "criticalLow": 150
+      "criticalLow": 150,
+      "radius": 60
     }
   },
   "percentage": {

@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/constants/constants.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/database_service.dart';
+import '../analytics/analytics_screen.dart';
+import '../settings/settings_screen.dart';
 import 'widgets/water_tank_painter.dart';
 
 class MainScreen extends StatefulWidget {
@@ -162,87 +164,41 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.water_drop_rounded,
-              color: AppColors.secondary,
-              size: AppSizes.iconMd,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              AppStrings.appName,
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.primary,
-                fontWeight: FontWeight.bold,
+      appBar: (_currentIndex == 1 || _currentIndex == 2)
+          ? null // Hide MainScreen appBar when displaying Analytics or Settings (they have their own AppBars)
+          : AppBar(
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.water_drop_rounded,
+                    color: AppColors.secondary,
+                    size: AppSizes.iconMd,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    AppStrings.appName,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Badge(
+                    label: Text('2'),
+                    child: Icon(Icons.notifications_none_rounded),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const _UserAvatarMenu(),
+                const SizedBox(width: 8),
+              ],
             ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Badge(
-              label: Text('2'),
-              child: Icon(Icons.notifications_none_rounded),
-            ),
-          ),
-          const SizedBox(width: 4),
-          const _UserAvatarMenu(),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Welcoming User
-            Text(
-              'Hello, ${FirebaseAuth.instance.currentUser?.displayName?.split(' ').first ?? 'User'}!',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Your water management system is running smoothly.',
-              style: theme.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-
-            // ═══════════════════════════════════════════════════════════════
-            // SECTION 1 — Live Sensor Data
-            // ═══════════════════════════════════════════════════════════════
-            _buildSensorSection(theme, isDark),
-
-            const SizedBox(height: AppSpacing.md),
-
-            // ═══════════════════════════════════════════════════════════════
-            // STATUS STRIP
-            // ═══════════════════════════════════════════════════════════════
-            _buildStatusStrip(theme),
-
-            const SizedBox(height: AppSpacing.md),
-
-            // ═══════════════════════════════════════════════════════════════
-            // SECTION 2 — System Controls
-            // ═══════════════════════════════════════════════════════════════
-            _buildControlsSection(theme, isDark),
-
-            const SizedBox(height: AppSpacing.lg),
-
-            // ═══════════════════════════════════════════════════════════════
-            // SECTION 3 — Water Usage
-            // ═══════════════════════════════════════════════════════════════
-            _buildWaterUsageSection(theme, isDark),
-
-            const SizedBox(height: AppSpacing.lg),
-          ],
-        ),
-      ),
+      body: _buildBody(theme, isDark),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -263,6 +219,71 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             icon: Icon(Icons.settings_outlined),
             label: 'Settings',
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody(ThemeData theme, bool isDark) {
+    switch (_currentIndex) {
+      case 0:
+        return _buildDashboardBody(theme, isDark);
+      case 1:
+        return const AnalyticsScreen();
+      case 2:
+        return const SettingsScreen();
+      default:
+        return _buildDashboardBody(theme, isDark);
+    }
+  }
+
+  Widget _buildDashboardBody(ThemeData theme, bool isDark) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Welcoming User
+          Text(
+            'Hello, ${FirebaseAuth.instance.currentUser?.displayName?.split(' ').first ?? 'User'}!',
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Your water management system is running smoothly.',
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+
+          // ═══════════════════════════════════════════════════════════════
+          // SECTION 1 — Live Sensor Data
+          // ═══════════════════════════════════════════════════════════════
+          _buildSensorSection(theme, isDark),
+
+          const SizedBox(height: AppSpacing.md),
+
+          // ═══════════════════════════════════════════════════════════════
+          // STATUS STRIP
+          // ═══════════════════════════════════════════════════════════════
+          _buildStatusStrip(theme),
+
+          const SizedBox(height: AppSpacing.md),
+
+          // ═══════════════════════════════════════════════════════════════
+          // SECTION 2 — System Controls
+          // ═══════════════════════════════════════════════════════════════
+          _buildControlsSection(theme, isDark),
+
+          const SizedBox(height: AppSpacing.lg),
+
+          // ═══════════════════════════════════════════════════════════════
+          // SECTION 3 — Water Usage
+          // ═══════════════════════════════════════════════════════════════
+          _buildWaterUsageSection(theme, isDark),
+
+          const SizedBox(height: AppSpacing.lg),
         ],
       ),
     );

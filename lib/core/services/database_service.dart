@@ -131,4 +131,61 @@ class DatabaseService {
       return {};
     }
   }
+
+  // ─── Configuration ──────────────────────────────────────────────────────────
+
+  /// Stream of all configuration data from Firebase.
+  Stream<Map<String, dynamic>> get configurationStream =>
+      _db.child('Configuration').onValue.map<Map<String, dynamic>>((event) {
+        final val = event.snapshot.value;
+        debugPrint('[DB] Configuration value = $val');
+        if (val is Map) {
+          return Map<String, dynamic>.from(val);
+        }
+        return <String, dynamic>{};
+      }).handleError((e) {
+        debugPrint('[DB] configurationStream error: $e');
+      });
+
+  /// Updates the tank configuration in Firebase.
+  Future<void> updateTankConfiguration({
+    required double emptyDistance,
+    required double fullDistance,
+    required double criticalLow,
+    required double radius,
+  }) async {
+    try {
+      debugPrint('[DB] updateTankConfiguration -> $emptyDistance, $fullDistance, $criticalLow, $radius');
+      await _db.child('Configuration/tank').set({
+        'emptyDistance': emptyDistance,
+        'fullDistance': fullDistance,
+        'criticalLow': criticalLow,
+        'radius': radius,
+      });
+    } catch (e) {
+      debugPrint('[DB] updateTankConfiguration error: $e');
+      rethrow;
+    }
+  }
+
+  /// Updates the well configuration in Firebase.
+  Future<void> updateWellConfiguration({
+    required double emptyDistance,
+    required double fullDistance,
+    required double criticalLow,
+    required double radius,
+  }) async {
+    try {
+      debugPrint('[DB] updateWellConfiguration -> $emptyDistance, $fullDistance, $criticalLow, $radius');
+      await _db.child('Configuration/well').set({
+        'emptyDistance': emptyDistance,
+        'fullDistance': fullDistance,
+        'criticalLow': criticalLow,
+        'radius': radius,
+      });
+    } catch (e) {
+      debugPrint('[DB] updateWellConfiguration error: $e');
+      rethrow;
+    }
+  }
 }
