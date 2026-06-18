@@ -1,5 +1,41 @@
 {
-  "database": {
-    "rules": "database.rules.json"
-  }
+    "system": {
+        "mode": "AUTO",
+        "relay": true,
+        "pumpStatus": "ON",
+        "lastUpdated": 1752848400
+    },
+    "sensors": {
+        "well": {
+            "distanceCm": 45,
+            "waterLevelPercent": 72
+        },
+        "tank": {
+            "distanceCm": 20,
+            "waterLevelPercent": 40
+        }
+    },
+    "settings": {
+        "tankLowThreshold": 30,
+        "tankFullThreshold": 90,
+        "wellMinimumThreshold": 20
+    },
+    "waterUsage": {
+        "2025-07-25": {
+            "liters": 320
+        },
+        "2025-07-26": {
+            "liters": 285
+        }
+    },
+    "logs": {
+        "-OU123": {
+            "event": "PUMP_ON",
+            "timestamp": 1752848400
+        },
+        "-OU124": {
+            "event": "PUMP_OFF",
+            "timestamp": 1752851200
+        }
+    }
 }

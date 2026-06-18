@@ -1,15 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'package:flutter/foundation.dart';
+
 /// Singleton service that wraps Firebase Auth + Google Sign-In.
 class AuthService {
   AuthService._();
   static final AuthService instance = AuthService._();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    serverClientId: '14520168544-er5vf9kbo0javqton9f78ssrelg641sf.apps.googleusercontent.com',
-  );
+  final GoogleSignIn _googleSignIn = kIsWeb
+      ? GoogleSignIn(clientId: '14520168544-er5vf9kbo0javqton9f78ssrelg641sf.apps.googleusercontent.com')
+      : GoogleSignIn(serverClientId: '14520168544-er5vf9kbo0javqton9f78ssrelg641sf.apps.googleusercontent.com');
 
   /// Stream of auth-state changes. Listen to this to reactively
   /// show the login or home screen.

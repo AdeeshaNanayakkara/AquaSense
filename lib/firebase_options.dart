@@ -28,8 +28,8 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'YOUR_WEB_API_KEY', // Get from Firebase Console
-    appId: 'YOUR_WEB_APP_ID', // Get from Firebase Console
+    apiKey: 'AIzaSyD23mIyFu2lT4jEILws6XM-BoQuh6HDaQM',
+    appId: '1:14520168544:web:1f93273b1ef6bd435f1305',
     messagingSenderId: '14520168544',
     projectId: 'aquasense-6b25f',
     authDomain: 'aquasense-6b25f.firebaseapp.com',

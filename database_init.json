@@ -1,12 +1,24 @@
 {
-  "Inputs": {
-    "tank": 72.5,
-    "temp": 24.8,
-    "ph": 7.2,
-    "tds": 180,
-    "outflow": 480
-  },
   "Controls": {
+    "mode": "Auto",
     "pump": false
+  },
+  "Inputs": {
+    "tankLevel": 100,
+    "wellLevel": 200
+  },
+  "settings": {
+    "tankLowerLimit": 1000,
+    "tankUpperLimit": 100,
+    "wellLowerLimit": 10000,
+    "wellUpperLimit": 100
+  },
+  "WaterUsage": {
+    "2025-07-20": {
+      "liters": 120
+    },
+    "2025-07-21": {
+      "liters": 95
+    }
   }
 }
