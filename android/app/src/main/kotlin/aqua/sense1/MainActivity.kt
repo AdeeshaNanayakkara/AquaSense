@@ -1,4 +1,4 @@
-package com.example.aquasense
+package aqua.sense1
 
 import io.flutter.embedding.android.FlutterActivity
 

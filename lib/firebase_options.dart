@@ -30,59 +30,59 @@ class DefaultFirebaseOptions {
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'YOUR_WEB_API_KEY', // Get from Firebase Console
     appId: 'YOUR_WEB_APP_ID', // Get from Firebase Console
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID', // Get from Firebase Console
+    messagingSenderId: '14520168544',
     projectId: 'aquasense-6b25f',
     authDomain: 'aquasense-6b25f.firebaseapp.com',
     databaseURL: 'https://aquasense-6b25f-default-rtdb.firebaseio.com',
-    storageBucket: 'aquasense-6b25f.appspot.com',
+    storageBucket: 'aquasense-6b25f.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR_ANDROID_API_KEY', // Get from Firebase Console
-    appId: 'YOUR_ANDROID_APP_ID', // Get from Firebase Console
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID', // Get from Firebase Console
+    apiKey: 'AIzaSyD23mIyFu2lT4jEILws6XM-BoQuh6HDaQM',
+    appId: '1:14520168544:android:2fbcfd648f4cddd75f1305',
+    messagingSenderId: '14520168544',
     projectId: 'aquasense-6b25f',
     databaseURL: 'https://aquasense-6b25f-default-rtdb.firebaseio.com',
-    storageBucket: 'aquasense-6b25f.appspot.com',
+    storageBucket: 'aquasense-6b25f.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'YOUR_IOS_API_KEY', // Get from Firebase Console
     appId: 'YOUR_IOS_APP_ID', // Get from Firebase Console
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID', // Get from Firebase Console
+    messagingSenderId: '14520168544',
     projectId: 'aquasense-6b25f',
     databaseURL: 'https://aquasense-6b25f-default-rtdb.firebaseio.com',
-    storageBucket: 'aquasense-6b25f.appspot.com',
-    iosBundleId: 'com.example.aquasense',
+    storageBucket: 'aquasense-6b25f.firebasestorage.app',
+    iosBundleId: 'aqua.sense1',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'YOUR_MACOS_API_KEY', // Get from Firebase Console
     appId: 'YOUR_MACOS_APP_ID', // Get from Firebase Console
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID', // Get from Firebase Console
+    messagingSenderId: '14520168544',
     projectId: 'aquasense-6b25f',
     databaseURL: 'https://aquasense-6b25f-default-rtdb.firebaseio.com',
-    storageBucket: 'aquasense-6b25f.appspot.com',
-    iosBundleId: 'com.example.aquasense',
+    storageBucket: 'aquasense-6b25f.firebasestorage.app',
+    iosBundleId: 'aqua.sense1',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'YOUR_WINDOWS_API_KEY', // Get from Firebase Console
     appId: 'YOUR_WINDOWS_APP_ID', // Get from Firebase Console
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID', // Get from Firebase Console
+    messagingSenderId: '14520168544',
     projectId: 'aquasense-6b25f',
     authDomain: 'aquasense-6b25f.firebaseapp.com',
     databaseURL: 'https://aquasense-6b25f-default-rtdb.firebaseio.com',
-    storageBucket: 'aquasense-6b25f.appspot.com',
+    storageBucket: 'aquasense-6b25f.firebasestorage.app',
   );
 
   static const FirebaseOptions linux = FirebaseOptions(
     apiKey: 'YOUR_LINUX_API_KEY', // Get from Firebase Console
     appId: 'YOUR_LINUX_APP_ID', // Get from Firebase Console
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID', // Get from Firebase Console
+    messagingSenderId: '14520168544',
     projectId: 'aquasense-6b25f',
     authDomain: 'aquasense-6b25f.firebaseapp.com',
     databaseURL: 'https://aquasense-6b25f-default-rtdb.firebaseio.com',
-    storageBucket: 'aquasense-6b25f.appspot.com',
+    storageBucket: 'aquasense-6b25f.firebasestorage.app',
   );
 }

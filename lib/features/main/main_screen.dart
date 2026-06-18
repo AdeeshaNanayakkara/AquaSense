@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/constants/constants.dart';
+import '../../core/services/auth_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -31,8 +33,8 @@ class _MainScreenState extends State<MainScreen> {
             Text(
               AppStrings.appName,
               style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.brightness == Brightness.dark 
-                    ? AppColors.darkTextPrimary 
+                color: theme.brightness == Brightness.dark
+                    ? AppColors.darkTextPrimary
                     : AppColors.primary,
                 fontWeight: FontWeight.bold,
               ),
@@ -47,6 +49,8 @@ class _MainScreenState extends State<MainScreen> {
               child: Icon(Icons.notifications_none_rounded),
             ),
           ),
+          const SizedBox(width: 4),
+          _UserAvatarMenu(),
           const SizedBox(width: 8),
         ],
       ),
@@ -57,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             // Welcoming User
             Text(
-              'Hello, User!',
+              'Hello, ${FirebaseAuth.instance.currentUser?.displayName?.split(' ').first ?? 'User'}!',
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -78,10 +82,7 @@ class _MainScreenState extends State<MainScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppRadius.card),
                   gradient: LinearGradient(
-                    colors: [
-                      AppColors.primary,
-                      AppColors.primaryDark,
-                    ],
+                    colors: [AppColors.primary, AppColors.primaryDark],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -136,9 +137,10 @@ class _MainScreenState extends State<MainScreen> {
                                   value: _waterLevel / 100,
                                   strokeWidth: 6,
                                   backgroundColor: Colors.white24,
-                                  valueColor: const AlwaysStoppedAnimation<Color>(
-                                    AppColors.secondaryLight,
-                                  ),
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                        AppColors.secondaryLight,
+                                      ),
                                 ),
                               ),
                               const Icon(
@@ -162,9 +164,21 @@ class _MainScreenState extends State<MainScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _buildCardStat('Daily Usage', '124L', Icons.insights_rounded),
-                          Container(width: 1, height: 24, color: Colors.white12),
-                          _buildCardStat('Quality Index', 'Optimal', Icons.check_circle_outline_rounded),
+                          _buildCardStat(
+                            'Daily Usage',
+                            '124L',
+                            Icons.insights_rounded,
+                          ),
+                          Container(
+                            width: 1,
+                            height: 24,
+                            color: Colors.white12,
+                          ),
+                          _buildCardStat(
+                            'Quality Index',
+                            'Optimal',
+                            Icons.check_circle_outline_rounded,
+                          ),
                         ],
                       ),
                     ),
@@ -189,8 +203,8 @@ class _MainScreenState extends State<MainScreen> {
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: _isPumpActive 
-                        ? AppColors.secondary.withValues(alpha: 0.15) 
+                    color: _isPumpActive
+                        ? AppColors.secondary.withValues(alpha: 0.15)
                         : Colors.grey.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
@@ -203,7 +217,11 @@ class _MainScreenState extends State<MainScreen> {
                   'Water Inflow Pump',
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-                subtitle: Text(_isPumpActive ? 'Status: Active and filling' : 'Status: Standby'),
+                subtitle: Text(
+                  _isPumpActive
+                      ? 'Status: Active and filling'
+                      : 'Status: Standby',
+                ),
                 trailing: Switch.adaptive(
                   value: _isPumpActive,
                   activeTrackColor: AppColors.secondary,
@@ -344,8 +362,8 @@ class _MainScreenState extends State<MainScreen> {
               value,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: theme.brightness == Brightness.dark 
-                    ? AppColors.darkTextPrimary 
+                color: theme.brightness == Brightness.dark
+                    ? AppColors.darkTextPrimary
                     : AppColors.primary,
               ),
             ),
@@ -365,5 +383,92 @@ class _MainScreenState extends State<MainScreen> {
         _simulateFilling();
       }
     });
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// User Avatar + Sign-Out popup menu in the AppBar
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _UserAvatarMenu extends StatelessWidget {
+  const _UserAvatarMenu();
+
+  @override
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final photoUrl = user?.photoURL;
+    final displayName = user?.displayName ?? 'User';
+    final email = user?.email ?? '';
+    final initial =
+        displayName.isNotEmpty ? displayName[0].toUpperCase() : 'U';
+
+    return PopupMenuButton<String>(
+      offset: const Offset(0, 48),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      onSelected: (value) async {
+        if (value == 'signout') {
+          await AuthService.instance.signOut();
+          // AuthWrapper's StreamBuilder automatically navigates to LoginScreen
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem<String>(
+          enabled: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                displayName,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                email,
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<String>(
+          value: 'signout',
+          child: Row(
+            children: [
+              Icon(Icons.logout_rounded, color: AppColors.error, size: 18),
+              const SizedBox(width: 10),
+              Text(
+                'Sign Out',
+                style: TextStyle(
+                  color: AppColors.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+      child: Padding(
+        padding: const EdgeInsets.only(right: 4),
+        child: CircleAvatar(
+          radius: 18,
+          backgroundColor: AppColors.primary,
+          backgroundImage:
+              photoUrl != null ? NetworkImage(photoUrl) : null,
+          child: photoUrl == null
+              ? Text(
+                  initial,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                )
+              : null,
+        ),
+      ),
+    );
   }
 }

@@ -1,0 +1,12 @@
+{
+  "Inputs": {
+    "tank": 72.5,
+    "temp": 24.8,
+    "ph": 7.2,
+    "tds": 180,
+    "outflow": 480
+  },
+  "Controls": {
+    "pump": false
+  }
+}

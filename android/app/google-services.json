@@ -1,0 +1,40 @@
+{
+    "project_info": {
+        "project_number": "14520168544",
+        "firebase_url": "https://aquasense-6b25f-default-rtdb.firebaseio.com",
+        "project_id": "aquasense-6b25f",
+        "storage_bucket": "aquasense-6b25f.firebasestorage.app"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:14520168544:android:2fbcfd648f4cddd75f1305",
+                "android_client_info": {
+                    "package_name": "aqua.sense1"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "14520168544-er5vf9kbo0javqton9f78ssrelg641sf.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyD23mIyFu2lT4jEILws6XM-BoQuh6HDaQM"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "14520168544-er5vf9kbo0javqton9f78ssrelg641sf.apps.googleusercontent.com",
+                            "client_type": 3
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}

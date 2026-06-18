@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/config/app_config.dart';
 import '../../core/constants/constants.dart';
-import '../main/main_screen.dart';
+import '../../../main.dart' show AuthWrapper;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,7 +11,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -60,7 +61,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void _navigateToHome() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const MainScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const AuthWrapper(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -124,7 +126,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       child: const LinearProgressIndicator(
                         minHeight: 4,
                         backgroundColor: Color(0xFFF0EFEF),
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primary,
+                        ),
                       ),
                     ),
                   ),
@@ -140,10 +144,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 child: Text(
                   'v1.0.0',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey.shade400,
-                        letterSpacing: 1.2,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: Colors.grey.shade400,
+                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
