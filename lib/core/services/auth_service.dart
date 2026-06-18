@@ -7,7 +7,9 @@ class AuthService {
   static final AuthService instance = AuthService._();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    serverClientId: '14520168544-er5vf9kbo0javqton9f78ssrelg641sf.apps.googleusercontent.com',
+  );
 
   /// Stream of auth-state changes. Listen to this to reactively
   /// show the login or home screen.
