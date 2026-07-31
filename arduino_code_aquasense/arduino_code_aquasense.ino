@@ -169,7 +169,9 @@ void loop() {
         pumpState = false;
       }
 
-      firebase.setInt("Controls/pump", pumpState);
+      firebase.setBool("Controls/pump", pumpState);
+    } else {
+      pumpState = firebase.getBool("Controls/pump");
     }
 
     digitalWrite(RELAY1, pumpState ? HIGH : LOW);

@@ -31,7 +31,13 @@ class DatabaseService {
       _db.child('Controls/pump').onValue.map((event) {
         final val = event.snapshot.value;
         debugPrint('[DB] pump = $val');
-        return (val as bool?) ?? false;
+        if (val is bool) return val;
+        if (val is num) return val == 1;
+        if (val is String) {
+          final lower = val.trim().toLowerCase();
+          return lower == 'true' || lower == '1' || lower == 'on';
+        }
+        return false;
       }).handleError((e) {
         debugPrint('[DB] pumpStream error: $e');
       });
@@ -46,7 +52,7 @@ class DatabaseService {
     }
   }
 
-  /// Set the pump state (only meaningful in MANUAL mode).
+  /// Set the pump state (true/false) (only meaningful in MANUAL mode).
   Future<void> setPump(bool on) async {
     try {
       debugPrint('[DB] setPump -> $on');
