@@ -4,8 +4,8 @@
 #include <LiquidCrystal_I2C.h>
 
 // ================= WIFI =================
-#define WIFI_SSID "Adeesha_Nanayakkara_R12"
-#define WIFI_PASSWORD "Adeesha1234"
+#define WIFI_SSID "iPhone"
+#define WIFI_PASSWORD "12345689"
 
 // ================= FIREBASE =================
 #define FIREBASE_URL "https://waterguard-36e61-default-rtdb.firebaseio.com/"
