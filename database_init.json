@@ -1,7 +1,7 @@
 {
   "Controls": {
     "mode": "AUTO",
-    "pump": false
+    "pump": 0
   },
   "Sensors": {
     "tank": {

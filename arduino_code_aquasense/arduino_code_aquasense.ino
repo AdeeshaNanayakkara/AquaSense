@@ -8,7 +8,7 @@
 #define WIFI_PASSWORD "12345689"
 
 // ================= FIREBASE =================
-#define FIREBASE_URL "https://waterguard-36e61-default-rtdb.firebaseio.com/"
+#define FIREBASE_URL "https://aquasense-6b25f-default-rtdb.firebaseio.com/"
 Firebase firebase(FIREBASE_URL);
 
 // ================= LCD =================
@@ -25,8 +25,8 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define TRIG_WELL D7
 #define ECHO_WELL D8
 
-#define RELAY1 D3
-#define BUZZER D0
+#define RELAY1 D0
+#define BUZZER D3
 
 // ================= TIMERS =================
 unsigned long lastSensorUpdate = 0;
@@ -83,16 +83,23 @@ int calculatePercentage(float distance, float emptyD, float fullD) {
   return constrain((int)p, 0, 100);
 }
 
-// ================= LOAD CONFIG =================
+// ================= LOAD CONFIG (FIXED FOR INTEGERS) =================
 void loadConfiguration() {
+  int val;
 
-  tankEmpty = firebase.getFloat("Configuration/tank/emptyDistance");
-  tankFull  = firebase.getFloat("Configuration/tank/fullDistance");
+  val = firebase.getInt("Configuration/tank/emptyDistance");
+  if (val > 0) tankEmpty = val;
 
-  wellEmpty = firebase.getFloat("Configuration/well/emptyDistance");
-  wellFull  = firebase.getFloat("Configuration/well/fullDistance");
+  val = firebase.getInt("Configuration/tank/fullDistance");
+  if (val > 0) tankFull = val;
 
-  Serial.println("Config Loaded Once");
+  val = firebase.getInt("Configuration/well/emptyDistance");
+  if (val > 0) wellEmpty = val;
+
+  val = firebase.getInt("Configuration/well/fullDistance");
+  if (val > 0) wellFull = val;
+
+  Serial.println("Config Loaded: Tank(" + String(tankEmpty) + "-" + String(tankFull) + ") Well(" + String(wellEmpty) + "-" + String(wellFull) + ")");
 }
 
 // ================= SETUP =================
@@ -131,7 +138,7 @@ void setup() {
   lcd.clear();
   lcd.print("WiFi Connected");
 
-  Serial.println("WiFi Connected");
+  Serial.println("\nWiFi Connected! IP: " + WiFi.localIP().toString());
 
   delay(1000);   // IMPORTANT for LCD stability
 
@@ -144,7 +151,14 @@ void loop() {
   // ================= MODE =================
   if (millis() - lastModeRead >= modeInterval) {
     lastModeRead = millis();
-    mode = firebase.getString("Controls/mode");
+    String rawMode = firebase.getString("Controls/mode");
+    rawMode.replace("\"", "");
+    rawMode.trim();
+    if (rawMode.equalsIgnoreCase("AUTO")) {
+      mode = "AUTO";
+    } else if (rawMode.equalsIgnoreCase("MANUAL")) {
+      mode = "MANUAL";
+    }
   }
 
   // ================= SENSOR UPDATE =================
@@ -169,9 +183,21 @@ void loop() {
         pumpState = false;
       }
 
-      firebase.setBool("Controls/pump", pumpState);
+      // Write 1 or 0 to Firebase
+      firebase.setInt("Controls/pump", pumpState ? 1 : 0);
+
     } else {
-      pumpState = firebase.getBool("Controls/pump");
+
+      // Read pump state (handles "true", "1", 1, "false", "0", 0)
+      String rawPump = firebase.getString("Controls/pump");
+      rawPump.replace("\"", "");
+      rawPump.trim();
+
+      if (rawPump.equalsIgnoreCase("true") || rawPump == "1" || rawPump.equalsIgnoreCase("ON")) {
+        pumpState = true;
+      } else if (rawPump.equalsIgnoreCase("false") || rawPump == "0" || rawPump.equalsIgnoreCase("OFF")) {
+        pumpState = false;
+      }
     }
 
     digitalWrite(RELAY1, pumpState ? HIGH : LOW);

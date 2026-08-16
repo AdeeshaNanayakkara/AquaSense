@@ -17,18 +17,23 @@ class DatabaseService {
   // ─── Controls ───────────────────────────────────────────────────────────────
 
   /// Stream of the current mode ("AUTO" or "MANUAL").
-  Stream<String> get modeStream =>
-      _db.child('Controls/mode').onValue.map((event) {
+  Stream<String> get modeStream => _db
+      .child('Controls/mode')
+      .onValue
+      .map((event) {
         final val = event.snapshot.value;
         debugPrint('[DB] mode = $val');
         return (val as String?) ?? 'AUTO';
-      }).handleError((e) {
+      })
+      .handleError((e) {
         debugPrint('[DB] modeStream error: $e');
       });
 
   /// Stream of the current pump state (true/false).
-  Stream<bool> get pumpStream =>
-      _db.child('Controls/pump').onValue.map((event) {
+  Stream<bool> get pumpStream => _db
+      .child('Controls/pump')
+      .onValue
+      .map((event) {
         final val = event.snapshot.value;
         debugPrint('[DB] pump = $val');
         if (val is bool) return val;
@@ -38,7 +43,8 @@ class DatabaseService {
           return lower == 'true' || lower == '1' || lower == 'on';
         }
         return false;
-      }).handleError((e) {
+      })
+      .handleError((e) {
         debugPrint('[DB] pumpStream error: $e');
       });
 
@@ -52,11 +58,12 @@ class DatabaseService {
     }
   }
 
-  /// Set the pump state (true/false) (only meaningful in MANUAL mode).
+  /// Set the pump state (1/0) (only meaningful in MANUAL mode).
   Future<void> setPump(bool on) async {
     try {
-      debugPrint('[DB] setPump -> $on');
-      await _db.child('Controls/pump').set(on);
+      final val = on ? 1 : 0;
+      debugPrint('[DB] setPump -> $val');
+      await _db.child('Controls/pump').set(val);
     } catch (e) {
       debugPrint('[DB] setPump error: $e');
     }
@@ -65,32 +72,40 @@ class DatabaseService {
   // ─── Percentages ────────────────────────────────────────────────────────────
 
   /// Stream of tank water level percentage (0–100).
-  Stream<double> get tankPercentageStream =>
-      _db.child('percentage/tank').onValue.map((event) {
+  Stream<double> get tankPercentageStream => _db
+      .child('percentage/tank')
+      .onValue
+      .map((event) {
         final val = event.snapshot.value;
         debugPrint('[DB] tank% = $val');
         if (val is num) return val.toDouble();
         return 0.0;
-      }).handleError((e) {
+      })
+      .handleError((e) {
         debugPrint('[DB] tankPercentageStream error: $e');
       });
 
   /// Stream of well water level percentage (0–100).
-  Stream<double> get wellPercentageStream =>
-      _db.child('percentage/well').onValue.map((event) {
+  Stream<double> get wellPercentageStream => _db
+      .child('percentage/well')
+      .onValue
+      .map((event) {
         final val = event.snapshot.value;
         debugPrint('[DB] well% = $val');
         if (val is num) return val.toDouble();
         return 0.0;
-      }).handleError((e) {
+      })
+      .handleError((e) {
         debugPrint('[DB] wellPercentageStream error: $e');
       });
 
   // ─── Water Usage ────────────────────────────────────────────────────────────
 
   /// Stream of all entries under `WaterUsage/` as a map of date-string → liters.
-  Stream<Map<String, double>> get waterUsageStream =>
-      _db.child('WaterUsage').onValue.map((event) {
+  Stream<Map<String, double>> get waterUsageStream => _db
+      .child('WaterUsage')
+      .onValue
+      .map((event) {
         final val = event.snapshot.value;
         debugPrint('[DB] WaterUsage value = $val');
         final result = <String, double>{};
@@ -107,7 +122,8 @@ class DatabaseService {
           }
         }
         return result;
-      }).handleError((e) {
+      })
+      .handleError((e) {
         debugPrint('[DB] waterUsageStream error: $e');
       });
 
@@ -141,15 +157,18 @@ class DatabaseService {
   // ─── Configuration ──────────────────────────────────────────────────────────
 
   /// Stream of all configuration data from Firebase.
-  Stream<Map<String, dynamic>> get configurationStream =>
-      _db.child('Configuration').onValue.map<Map<String, dynamic>>((event) {
+  Stream<Map<String, dynamic>> get configurationStream => _db
+      .child('Configuration')
+      .onValue
+      .map<Map<String, dynamic>>((event) {
         final val = event.snapshot.value;
         debugPrint('[DB] Configuration value = $val');
         if (val is Map) {
           return Map<String, dynamic>.from(val);
         }
         return <String, dynamic>{};
-      }).handleError((e) {
+      })
+      .handleError((e) {
         debugPrint('[DB] configurationStream error: $e');
       });
 
@@ -161,7 +180,9 @@ class DatabaseService {
     required double radius,
   }) async {
     try {
-      debugPrint('[DB] updateTankConfiguration -> $emptyDistance, $fullDistance, $criticalLow, $radius');
+      debugPrint(
+        '[DB] updateTankConfiguration -> $emptyDistance, $fullDistance, $criticalLow, $radius',
+      );
       await _db.child('Configuration/tank').set({
         'emptyDistance': emptyDistance,
         'fullDistance': fullDistance,
@@ -182,7 +203,9 @@ class DatabaseService {
     required double radius,
   }) async {
     try {
-      debugPrint('[DB] updateWellConfiguration -> $emptyDistance, $fullDistance, $criticalLow, $radius');
+      debugPrint(
+        '[DB] updateWellConfiguration -> $emptyDistance, $fullDistance, $criticalLow, $radius',
+      );
       await _db.child('Configuration/well').set({
         'emptyDistance': emptyDistance,
         'fullDistance': fullDistance,
